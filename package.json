@@ -1,0 +1,18 @@
+{
+  "name": "phone-party-arcade",
+  "version": "7.0.0",
+  "description": "Hub game 3D trên PC, dùng điện thoại làm tay cầm qua WebSocket",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "online": "node server.js --online",
+    "https": "node server.js --https",
+    "cert": "node make-cert.js",
+    "vendor": "node vendor.js",
+    "test": "node test/tunnel.test.js && node test/server.test.js && node --no-warnings test/games.test.mjs",
+    "lan": "node server.js --lan"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

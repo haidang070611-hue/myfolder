@@ -1,0 +1,12 @@
+# Deploy lên Render.com: New > Blueprint > chọn repo chứa file này
+services:
+  - type: web
+    name: phone-party-arcade
+    runtime: node
+    plan: free
+    buildCommand: "echo no build"
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: NO_TLS
+        value: "1"
