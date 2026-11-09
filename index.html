@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phone Party Arcade</title>
+<link rel="stylesheet" href="/css/host.css">
+<script src="/js/boot.js" defer></script>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<!-- SẢNH CHỜ -->
+<div id="lobby" class="overlay">
+  <section class="panel join">
+    <div class="brand"><span class="logo">🎮</span><div><h1>Phone Party</h1><p class="muted">Điện thoại của bạn là tay cầm</p></div></div>
+    <div id="qr" class="qr"></div>
+    <div class="code-row"><span class="muted">Mã phòng</span><b id="code">----</b></div>
+    <div id="modeTabs" class="tabs">
+      <button id="tabLan" class="tab">📶 Cùng Wi-Fi</button>
+      <button id="tabNet" class="tab on">🌐 Mọi mạng / 4G</button>
+    </div>
+    <button id="url" class="url" title="Bấm để đổi địa chỉ IP"></button>
+    <p id="netMsg" class="muted small netmsg"></p>
+
+    <div class="sect">
+      <div class="sect-h"><span>Người chơi</span><span id="pcount" class="muted small"></span></div>
+      <div id="players" class="players"></div>
+      <button id="addKb" class="ghost">⌨️ Chơi bằng bàn phím</button>
+    </div>
+
+    <div class="sect">
+      <div class="sect-h"><span>🤖 Bot</span><span class="muted small" id="botNote"></span></div>
+      <div class="seg" id="botMode">
+        <button data-v="auto" class="on">Tự động</button><button data-v="fill">Luôn bù</button><button data-v="off">Tắt</button>
+      </div>
+      <div class="seg" id="botLevel">
+        <button data-v="easy">Dễ</button><button data-v="mid" class="on">Vừa</button><button data-v="hard">Khó</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GIỮA: khoảng trống để thấy người chơi (3D) vừa vào phòng -->
+  <div id="stage" class="stage">
+    <div id="stageHint" class="stage-hint"></div>
+  </div>
+
+  <section class="panel games">
+    <div class="games-head">
+      <h2>Chọn game</h2>
+      <div id="cats" class="cats"></div>
+    </div>
+    <div id="cards" class="cards"></div>
+    <div id="detail" class="detail"></div>
+    <div class="foot">
+      <div id="board" class="lboard"></div>
+      <p id="audioHint" class="muted small">🔇 Bấm vào màn hình để bật âm · M: nhạc · F: toàn màn hình · Q: đồ họa</p>
+    </div>
+  </section>
+</div>
+
+<!-- HUD TRONG GAME -->
+<div id="hud" class="hidden">
+  <div class="topbar"><span id="hTitle"></span><span id="hTimer"></span></div>
+  <div id="hBoard" class="hboard"></div>
+  <div id="intro" class="intro"></div>
+  <div id="banner" class="banner"></div>
+  <button id="btnMenu" class="ghost small">✕ Về menu</button>
+</div>
+
+<!-- KẾT QUẢ -->
+<div id="results" class="overlay hidden"></div>
+<canvas id="confetti" class="hidden"></canvas>
+
+<div id="veil" class="veil"></div>
+<div id="toast" class="toast"></div>
+<div id="conn" class="conn hidden">Mất kết nối server… đang nối lại</div>
+
+</body>
+</html>

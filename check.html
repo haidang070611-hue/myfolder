@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kiểm tra kết nối</title>
+<style>
+body{margin:0;padding:20px;background:#0b0d1a;color:#eef;font:16px/1.5 system-ui,sans-serif}
+h1{font-size:24px;margin:0 0 4px}.sub{color:#98a0cc;margin:0 0 18px}
+.row{display:flex;gap:12px;align-items:flex-start;background:#151936;border:1px solid #2b3163;border-radius:14px;padding:12px 14px;margin:10px 0}
+.ic{font-size:22px;width:28px;text-align:center}.t b{display:block}.t span{color:#98a0cc;font-size:14px}
+.ok .ic::before{content:"✅"}.bad .ic::before{content:"❌"}.wait .ic::before{content:"⏳"}.warn .ic::before{content:"⚠️"}
+a.btn{display:inline-block;margin-top:14px;background:linear-gradient(135deg,#6c7cff,#b36cff);color:#fff;padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:700}
+code{background:#0007;padding:2px 6px;border-radius:6px}
+</style></head><body>
+<h1>🔧 Kiểm tra kết nối</h1>
+<p class="sub">Mở trang này trên <b>điện thoại</b> để biết vì sao không vào được phòng.</p>
+<div id="out"></div>
+<a class="btn" href="/play">← Về tay cầm</a>
+<script>
+const out = document.getElementById('out');
+function row(id, title, cls, detail){
+  let el = document.getElementById(id);
+  if(!el){ el=document.createElement('div'); el.id=id; out.appendChild(el); }
+  el.className='row '+cls;
+  el.innerHTML='<div class="ic"></div><div class="t"><b>'+title+'</b><span>'+(detail||'')+'</span></div>';
+}
+(async()=>{
+  row('a','Địa chỉ đang dùng','ok', location.origin+(location.protocol==='https:'?' (HTTPS)':' (HTTP)'));
+  row('b','Máy chủ trả lời (HTTP)','wait','Đang thử…');
+  try{ const t=performance.now(); const r=await fetch('/healthz',{cache:'no-store'});
+    if(r.ok) row('b','Máy chủ trả lời (HTTP)','ok','Phản hồi '+Math.round(performance.now()-t)+' ms');
+    else row('b','Máy chủ trả lời (HTTP)','bad','Mã lỗi '+r.status);
+  }catch(e){ row('b','Máy chủ KHÔNG trả lời','bad','Điện thoại không tới được PC. Kiểm tra: (1) cùng Wi-Fi? (2) tường lửa Windows chặn cổng 3000 → chạy <code>open-firewall.bat</code> bằng quyền Administrator; (3) Wi-Fi công cộng/khách thường chặn thiết bị nói chuyện với nhau → dùng chế độ <b>Mọi mạng / 4G</b> trên màn hình PC.'); }
+  row('c','Kết nối thời gian thực (WebSocket)','wait','Đang thử…');
+  await new Promise((res)=>{
+    let done=false; const fin=(cls,d)=>{ if(done)return; done=true; row('c','Kết nối thời gian thực (WebSocket)',cls,d); res(); };
+    try{
+      const ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/ws'); const t=performance.now();
+      ws.onopen=()=>ws.send(JSON.stringify({t:'ping',n:1}));
+      ws.onmessage=(e)=>{ try{ if(JSON.parse(e.data).t==='pong'){ fin('ok','Hoạt động tốt · '+Math.round(performance.now()-t)+' ms'); ws.close(); } }catch(_){} };
+      ws.onerror=()=>fin('bad','Bị chặn. Nếu địa chỉ là <code>https://IP:3000</code> chứng chỉ tự ký: iPhone thường chặn WebSocket. Hãy chạy server bằng <code>npm start</code> (HTTP) hoặc dùng chế độ Mọi mạng.');
+      setTimeout(()=>fin('bad','Quá thời gian chờ. Mạng có thể chặn WebSocket (Wi-Fi công ty/trường học) → thử 4G hoặc chế độ Mọi mạng.'),6000);
+    }catch(e){ fin('bad',String(e)); }
+  });
+  row('d','Cảm biến nghiêng (đua xe)', window.isSecureContext?'ok':'warn', window.isSecureContext?'Được phép dùng':'Cần HTTPS. Dùng chế độ Mọi mạng / 4G (có HTTPS hợp lệ) hoặc chơi bằng cần gạt.');
+  try{ const i=await (await fetch('/api/info',{cache:'no-store'})).json();
+    row('e','Địa chỉ PC trong mạng','ok', (i.ips||[]).map(ip=>'<code>http://'+ip+':'+i.port+'</code>').join(' ')||'Không rõ'); }catch(e){}
+})();
+</script></body></html>

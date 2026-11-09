@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#070914">
+<title>Tay cầm</title>
+<link rel="stylesheet" href="/css/controller.css">
+</head>
+<body>
+<div class="bg"></div>
+<main id="join" class="screen">
+  <div class="logo">🎮</div>
+  <h1>Phone Party</h1>
+  <p class="sub">Nhập mã phòng trên màn hình PC</p>
+  <div class="fields">
+    <input id="code" maxlength="4" autocomplete="off" autocapitalize="characters" placeholder="ABCD" inputmode="text" aria-label="Mã phòng">
+    <input id="name" maxlength="14" autocomplete="off" placeholder="Tên của bạn" aria-label="Tên">
+    <button id="go" class="big">Vào chơi</button>
+  </div>
+  <p id="err" class="err"></p>
+  <div id="net" class="netbox wait"><span class="dot"></span><span id="netTxt">Đang kết nối tới máy chủ…</span></div>
+  <p id="netTip" class="tip hidden"></p>
+  <a class="chk" href="/check">🔧 Kiểm tra kết nối</a>
+</main>
+
+<main id="pad" class="screen hidden">
+  <header>
+    <span id="avatar" class="avatar">P</span>
+    <div class="who"><b id="me">P1</b><span id="title" class="title">Chờ game…</span></div>
+    <button id="lookBtn" class="pill look hidden">👕 Trang phục</button>
+    <span id="botchip" class="chip hidden">🤖</span>
+    <span id="ping" class="chip ping">-- ms</span>
+    <button id="gyroBtn" class="pill hidden">Nghiêng: TẮT</button>
+    <button id="invBtn" class="pill hidden">Đảo</button>
+  </header>
+  <div id="status" class="status"></div>
+  <section class="controls">
+    <div id="stick" class="stick">
+      <div class="ring r1"></div><div class="ring r2"></div>
+      <i class="tick t1"></i><i class="tick t2"></i><i class="tick t3"></i><i class="tick t4"></i>
+      <div id="knob" class="knob"></div>
+    </div>
+    <div class="btns">
+      <div class="bwrap bw-b" id="wrapB"><button id="btnB" class="act b">B</button></div>
+      <div class="bwrap bw-a"><button id="btnA" class="act a">A</button></div>
+    </div>
+  </section>
+</main>
+<section id="looks" class="sheet hidden scroll" aria-label="Trang phục">
+  <div class="sheet-top">
+    <div id="lkPrev" class="lk-prev"></div>
+    <div class="lk-side">
+      <h2>Trang phục</h2>
+      <p id="lkNote" class="lk-note">Chọn đồ, nhân vật trên màn hình PC đổi theo ngay.</p>
+      <div class="lk-actions"><button id="lkRand" class="pill">🎲 Ngẫu nhiên</button><button id="lkDone" class="pill ok">Xong ✓</button></div>
+    </div>
+  </div>
+  <div id="lkTabs" class="lk-tabs scroll"></div>
+  <div id="lkGrid" class="lk-grid scroll"></div>
+</section>
+<script type="module" src="/js/controller.js"></script>
+</body>
+</html>
