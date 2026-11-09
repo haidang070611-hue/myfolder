@@ -3,8 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#070914">
+<meta name="color-scheme" content="dark">
 <title>Phone Party Arcade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/host.css">
+<link rel="stylesheet" href="/visual-overhaul.css">
 <script src="/js/boot.js" defer></script>
 </head>
 <body>
@@ -40,7 +46,6 @@
     </div>
   </section>
 
-  <!-- GIỮA: khoảng trống để thấy người chơi (3D) vừa vào phòng -->
   <div id="stage" class="stage">
     <div id="stageHint" class="stage-hint"></div>
   </div>
@@ -71,10 +76,8 @@
 <!-- KẾT QUẢ -->
 <div id="results" class="overlay hidden"></div>
 <canvas id="confetti" class="hidden"></canvas>
-
 <div id="veil" class="veil"></div>
 <div id="toast" class="toast"></div>
 <div id="conn" class="conn hidden">Mất kết nối server… đang nối lại</div>
-
 </body>
 </html>

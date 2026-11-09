@@ -1,0 +1,196 @@
+/* Phone Party Arcade — cinematic glass UI enhancement layer.
+   Loaded after host.css; deliberately presentation-only, no gameplay changes. */
+:root {
+  color-scheme: dark;
+  --bg: #060812;
+  --panel: rgba(11, 15, 34, .78);
+  --panel2: rgba(255, 255, 255, .055);
+  --line: rgba(174, 190, 255, .18);
+  --txt: #f5f7ff;
+  --mut: #a7b0d7;
+  --gold: #ffe083;
+  --r: 22px;
+  --shadow: 0 24px 80px rgba(0, 0, 0, .48), 0 4px 18px rgba(75, 96, 190, .12);
+  font-family: "DM Sans", "Segoe UI", system-ui, sans-serif;
+}
+
+html, body { background: #060812; }
+body { isolation: isolate; }
+canvas#c { z-index: 0; }
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% -18%, rgba(94, 106, 255, .18), transparent 46%),
+    radial-gradient(ellipse at 100% 100%, rgba(205, 91, 255, .10), transparent 38%),
+    linear-gradient(180deg, rgba(4, 6, 16, .08), rgba(4, 6, 16, .32));
+}
+body::after { z-index: 1; background: radial-gradient(ellipse at center, transparent 48%, rgba(0, 0, 0, .52) 100%); }
+#lobby, #results { z-index: 2; }
+#hud { z-index: 3; }
+
+.overlay { gap: clamp(12px, 1.5vw, 24px); padding: clamp(12px, 1.6vw, 26px); }
+.panel {
+  position: relative; overflow: hidden;
+  background: linear-gradient(145deg, rgba(23, 29, 63, .82), rgba(8, 11, 28, .82));
+  border: 1px solid rgba(185, 198, 255, .2);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, .42), inset 0 1px 0 rgba(255, 255, 255, .12), inset 0 -1px 0 rgba(255, 255, 255, .025);
+  backdrop-filter: blur(24px) saturate(1.35);
+  -webkit-backdrop-filter: blur(24px) saturate(1.35);
+}
+.panel::before {
+  background: linear-gradient(130deg, rgba(255,255,255,.085), transparent 24%, transparent 76%, rgba(124,140,255,.045));
+}
+.join, .games { border-radius: 26px; }
+.join { gap: 12px; }
+.brand { padding: 2px 2px 9px; }
+.logo {
+  border-radius: 17px; background: linear-gradient(145deg, #8795ff, #6548d8 60%, #c56bff);
+  box-shadow: 0 10px 32px rgba(105, 94, 255, .38), inset 0 1px 0 rgba(255,255,255,.5);
+  transform: perspective(120px) rotateY(-8deg) rotateX(5deg);
+}
+.brand h1 { letter-spacing: -.5px; font-weight: 900; }
+.brand p { margin-top: 4px; }
+.qr {
+  border-radius: 19px; box-shadow: 0 0 0 1px rgba(255,255,255,.72), 0 12px 40px rgba(0,0,0,.32), 0 0 34px rgba(124,140,255,.2);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.qr:hover { transform: translateY(-2px) scale(1.015); box-shadow: 0 0 0 1px white, 0 18px 48px rgba(0,0,0,.4), 0 0 42px rgba(124,140,255,.3); }
+.code-row b { font-size: clamp(38px, 4vw, 52px); letter-spacing: .16em; text-shadow: 0 0 28px rgba(255, 210, 63, .38), 0 3px 0 rgba(93, 56, 0, .32); }
+.sect { background: rgba(5, 8, 24, .38); border-color: rgba(177, 191, 255, .14); border-radius: 18px; }
+.sect-h { letter-spacing: .02em; }
+.ghost, .tab, .seg button, .cat, .btn, .play { transition: transform .18s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease, color .2s ease; }
+.ghost { border-color: rgba(180, 193, 255, .2); color: #d3d9f8; }
+.ghost:hover, .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,.24); }
+button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+.games { gap: 14px; }
+.games-head { align-items: flex-start; }
+.games-head h2 { font-size: clamp(21px, 1.8vw, 27px); font-weight: 900; letter-spacing: -.04em; }
+.cats { gap: 7px; }
+.cat { background: rgba(255,255,255,.045); border-color: rgba(180,193,255,.14); }
+.cat:hover { background: rgba(255,255,255,.11); transform: translateY(-1px); }
+.cat.on { color: #10152b; background: linear-gradient(135deg, #fff, #dce2ff); box-shadow: 0 5px 18px rgba(255,255,255,.16); }
+.cards { gap: 11px; padding: 10px 8px 14px; perspective: 900px; }
+.card {
+  min-height: 106px; overflow: hidden; border-radius: 19px;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--c) 24%, #14182f), rgba(9, 12, 29, .96) 76%);
+  border: 1px solid color-mix(in srgb, var(--c) 28%, rgba(255,255,255,.1));
+  box-shadow: 0 8px 22px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.11);
+  transform-style: preserve-3d;
+}
+.card::before { width: 140px; height: 140px; right: -44px; top: -50px; opacity: .8; }
+.card::after { pointer-events: none; }
+.card .em { display: inline-grid; place-items: center; width: 43px; height: 43px; margin-bottom: 5px; border-radius: 14px; background: rgba(255,255,255,.075); box-shadow: inset 0 1px 0 rgba(255,255,255,.16); }
+.card b { display: block; font-size: 15px; font-weight: 800; letter-spacing: -.015em; }
+.card em { display: block; margin-top: 3px; }
+.card:hover { transform: translateY(-3px) rotateX(1deg); }
+.card.sel {
+  transform: translateY(-4px) scale(1.025) rotateX(1deg);
+  border-color: color-mix(in srgb, var(--c) 84%, white);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 55%, transparent), 0 18px 38px rgba(0,0,0,.42), 0 0 32px color-mix(in srgb, var(--c) 28%, transparent), inset 0 1px 0 rgba(255,255,255,.22);
+}
+.detail {
+  border: 1px solid color-mix(in srgb, var(--c, #7c8cff) 38%, rgba(255,255,255,.12));
+  box-shadow: 0 14px 36px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.14);
+  backdrop-filter: blur(16px);
+}
+.detail .big { filter: drop-shadow(0 5px 16px color-mix(in srgb, var(--c, #7c8cff) 50%, transparent)); }
+.detail h3 { font-weight: 900; letter-spacing: -.025em; }
+.tagc { border: 1px solid rgba(255,255,255,.09); }
+.play {
+  min-height: 48px; color: #17172a;
+  background: linear-gradient(135deg, #fff0a7, #ffd255 52%, #ffad4d);
+  box-shadow: 0 10px 28px rgba(255,177,58,.23), inset 0 1px 0 rgba(255,255,255,.8), inset 0 -2px 0 rgba(174,92,16,.22);
+}
+.play:hover { transform: translateY(-2px) scale(1.012); box-shadow: 0 14px 34px rgba(255,177,58,.32), inset 0 1px 0 rgba(255,255,255,.8); }
+.play:active { transform: translateY(1px) scale(.99); }
+.foot { padding: 2px 4px 0; }
+
+/* In-game glass HUD: stronger hierarchy, readable on bright and dark scenes. */
+.topbar {
+  top: max(14px, env(safe-area-inset-top)); padding: 11px 18px; gap: 18px;
+  border-radius: 16px; background: rgba(8, 11, 28, .72);
+  border-color: rgba(202, 211, 255, .22); box-shadow: 0 12px 34px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.12);
+  backdrop-filter: blur(18px) saturate(1.35); -webkit-backdrop-filter: blur(18px) saturate(1.35);
+}
+#hTitle { font-weight: 800; letter-spacing: .015em; }
+#hTimer { font-weight: 900; font-size: 18px; text-shadow: 0 0 18px rgba(255,224,131,.28); }
+.hboard { top: max(16px, env(safe-area-inset-top)); left: max(16px, env(safe-area-inset-left)); width: min(250px, 30vw); }
+.hrow {
+  min-height: 40px; padding: 7px 11px; border-radius: 13px;
+  border-color: rgba(255,255,255,.1); border-left-width: 4px;
+  box-shadow: 0 8px 22px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.08);
+  backdrop-filter: blur(13px); -webkit-backdrop-filter: blur(13px);
+}
+.hrow .nm { font-weight: 700; }
+.hrow .tx { font-weight: 900; text-shadow: 0 0 12px rgba(255,224,131,.18); }
+.banner { filter: drop-shadow(0 8px 28px rgba(0,0,0,.42)); letter-spacing: -.045em; }
+.intro {
+  border: 1px solid rgba(213,220,255,.2); box-shadow: 0 20px 60px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.15);
+  backdrop-filter: blur(20px) saturate(1.3); -webkit-backdrop-filter: blur(20px) saturate(1.3);
+}
+#btnMenu { border-color: rgba(255,255,255,.18); background: rgba(7,10,26,.7); backdrop-filter: blur(12px); }
+
+/* Winner screen gets a stage-light treatment while retaining the existing podium DOM. */
+#results { background: radial-gradient(ellipse at 50% 34%, rgba(90,91,190,.22), rgba(5,7,18,.75) 68%), rgba(4,5,14,.62); }
+.res {
+  position: relative; overflow: hidden; border: 1px solid rgba(205,214,255,.2);
+  background: linear-gradient(145deg, rgba(25,30,66,.91), rgba(8,11,29,.92));
+  box-shadow: 0 30px 100px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.13);
+  backdrop-filter: blur(24px) saturate(1.3); -webkit-backdrop-filter: blur(24px) saturate(1.3);
+}
+.res::before {
+  content: ""; position: absolute; width: 440px; height: 220px; top: -170px; left: 50%; transform: translateX(-50%);
+  background: radial-gradient(ellipse, rgba(255,218,122,.24), transparent 70%); pointer-events: none;
+}
+.res h2 { position: relative; font-weight: 900; letter-spacing: -.035em; text-shadow: 0 4px 24px rgba(0,0,0,.3); }
+.podium { perspective: 900px; }
+.pod .bar { box-shadow: 0 16px 30px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.32); transform: perspective(420px) rotateX(2deg); }
+.pod:first-child .bar { box-shadow: 0 0 34px color-mix(in srgb, var(--bc) 24%, transparent), 0 18px 35px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.4); }
+.pod .av { box-shadow: 0 0 0 5px rgba(255,255,255,.14), 0 10px 28px rgba(0,0,0,.38); }
+.rrow { border: 1px solid rgba(255,255,255,.07); border-left: 4px solid var(--c); }
+.btn.pri { box-shadow: 0 10px 26px rgba(255,177,58,.24), inset 0 1px 0 rgba(255,255,255,.72); }
+.toast { box-shadow: 0 12px 34px rgba(0,0,0,.34); }
+
+@media (min-width: 1001px) {
+  .join { width: clamp(290px, 23vw, 360px); }
+  .games { flex-basis: clamp(400px, 29vw, 560px); width: clamp(400px, 29vw, 560px); }
+  .stage { min-width: 160px; }
+}
+@media (max-width: 1000px) {
+  .overlay { gap: 14px; padding: 12px; }
+  .join, .games { border-radius: 22px; }
+  .games-head { align-items: center; }
+  .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card { min-height: 92px; }
+  .hboard { width: min(220px, 48vw); }
+  .topbar { top: max(10px, env(safe-area-inset-top)); }
+  .intro { max-width: calc(100vw - 28px); }
+}
+@media (max-width: 560px) {
+  .overlay { padding: 8px; gap: 10px; }
+  .panel { padding: 14px; border-radius: 19px; }
+  .brand h1 { font-size: 21px; }
+  .qr { width: 156px; height: 156px; }
+  .code-row b { font-size: 38px; }
+  .cards { gap: 8px; }
+  .card { padding: 11px; min-height: 88px; border-radius: 15px; }
+  .card .em { width: 36px; height: 36px; font-size: 28px; }
+  .card b { font-size: 13px; }
+  .detail .big { font-size: 38px; }
+  .detail h3 { font-size: 18px; }
+  .detail p { font-size: 12.5px; }
+  .topbar { left: 50%; max-width: calc(100vw - 130px); gap: 10px; padding: 9px 12px; font-size: 13px; }
+  #hTimer { min-width: 58px; font-size: 16px; }
+  .hboard { top: 66px; left: 8px; width: min(190px, 54vw); }
+  .hrow { min-height: 34px; padding: 5px 8px; font-size: 12px; }
+  .banner { font-size: clamp(54px, 15vw, 86px); }
+  .banner.sm { font-size: clamp(34px, 10vw, 54px); }
+  .podium { height: 190px; gap: 8px; }
+  .pod { width: min(28vw, 105px); }
+  .pod .av { width: 52px; height: 52px; }
+  .res { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
